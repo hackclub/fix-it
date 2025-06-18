@@ -1,0 +1,8 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/work-sans';
+@import '@fontsource-variable/jetbrains-mono';
+
+body {
+	font-family: 'Work Sans Variable', 'Work Sans', system-ui, sans-serif;
+	background-color: #DCDFEF;
+}
