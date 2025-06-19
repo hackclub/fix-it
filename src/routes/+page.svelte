@@ -2,12 +2,14 @@
 	import { onMount } from "svelte";
 
 	let countdown = "00:00:00";
-	let cursorX = 0;
-	let cursorY = 0;
+	let cursorX = -100; // start off-screen
+	let cursorY = -100;
 	let isHovering = false;
+	let showCursor = false;
+	let isMobile = false;
 
-	// 9pm EST on 6/20/24
-	const deadline = new Date("2025-06-20T21:00:00-04:00");
+	// 6pm EST on 6/20/24
+    const deadline = new Date("2025-06-20T18:00:00-04:00");
 
 	function updateCountdown() {
 		const now = new Date();
@@ -18,11 +20,19 @@
 		countdown = `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
 	}
 
-	function handleMouseMove(event: MouseEvent) {
-		cursorX = event.clientX;
-		cursorY = event.clientY;
+	function detectMobile() { // if the device has no mouse, treat it as mobile-- good enough for this
+		return matchMedia('(pointer: coarse)').matches
 	}
 
+	function handleMouseMove(event: MouseEvent) {
+		if (!isMobile) {
+			cursorX = event.clientX;
+			cursorY = event.clientY;
+			showCursor = true;
+		}
+	}
+
+    // for custom cursor hover effect
 	function addHoverListeners() {
 		const interactiveElements = document.querySelectorAll('a, button');
 		
@@ -39,16 +49,13 @@
 
 	onMount(() => {
 		updateCountdown();
-		const interval = setInterval(updateCountdown, 1000);
+		setInterval(updateCountdown, 1000);
 		
-		document.addEventListener('mousemove', handleMouseMove);
+		isMobile = detectMobile();
+        console.log(isMobile ? "Mobile device detected" : "Desktop device detected");
+		if (!isMobile) document.addEventListener('mousemove', handleMouseMove);
 		
 		setTimeout(addHoverListeners, 100);
-		
-		return () => {
-			clearInterval(interval);
-			document.removeEventListener('mousemove', handleMouseMove);
-		};
 	});
 </script>
 
@@ -66,7 +73,8 @@
 		background-size: auto;
 		min-height: 100vh;
 	}
-		.custom-cursor {
+	
+	.custom-cursor {
 		position: fixed;
 		width: 40px;
 		height: 40px;
@@ -76,10 +84,22 @@
 		z-index: 9999;
 		mix-blend-mode: difference;
 		transform: translate(-50%, -50%);
-        transition-property: width, height, border;
+        transition-property: width, height, border, opacity;
         transition-duration: 0.15s;
+		opacity: 0;
 	}
-		.custom-cursor.hovering {
+	
+	.custom-cursor.visible {
+		opacity: 1;
+	}
+	
+	/* hide custom cursor on mobile */
+	@media (hover: none) or (pointer: coarse) {
+		.custom-cursor {
+			display: none;
+		}
+	}
+    .custom-cursor.hovering {
 		width: 60px;
 		height: 60px;
 		background-color: transparent;
@@ -121,7 +141,7 @@
 <div class="absolute inset-0 h-[135vh] bg-gradient-to-b from-[#ECEDF3] to-[#DCDFEF] -z-10" style="background: linear-gradient(to bottom, rgba(236,237,243,0.9), rgba(220,223,239,0.9)), url('/noise.png');"></div>
 
 <!-- custom cursor -->
-<div class="custom-cursor {isHovering ? 'hovering' : ''}" style="left: {cursorX}px; top: {cursorY}px;"></div>
+<div class="custom-cursor {isHovering ? 'hovering' : ''} {showCursor && !isMobile ? 'visible' : ''}" style="left: {cursorX}px; top: {cursorY}px;"></div>
 
 <div class="h-screen flex flex-col items-center">
 	<div class="text-center pt-8 px-4 z-10 relative">
@@ -139,14 +159,14 @@
 </div>
 
 <div class="text-center mb-20 py-32">
-    <div class="font-mono text-xl font-bold transform scale-y-[1.75] text-[#86344D] countdown-tooltip">
+    <div class="font-mono text-xl font-bold transform scale-y-[1.75] text-[#86344D] countdown-tooltip !cursor-none">
         THIS WEBSITE WILL SELF DESTRUCT IN <span class="text-3xl translate-y-0.5 inline-block">{countdown}</span>
     </div>
 </div>
 <div class="mx-auto mb-16 max-w-4xl px-4 md:px-12">
     <p class="mb-4 text-lg leading-relaxed text-[#1C222A]">
         <span class="font-bold transform scale-y-175 inline-block origin-center text-[#1C222A] text-xl mr-0.5">FIX IT</span> is a
-        <a href="https://ysws.hackclub.com/" class="font-mono text-[#531515] underline">You Ship, We Ship</a> about fixing the internet.
+        <a href="https://ysws.hackclub.com/" target="_blank"  class="font-mono text-[#531515] underline">You Ship, We Ship</a> about fixing the internet.
     </p>
 
     <p class="mb-6 text-lg leading-relaxed text-[#1C222A]">
@@ -156,7 +176,7 @@
         <h3 class="mb-4 mt-12 font-bold transform scale-y-175 origin-center text-[#1C222A] text-xl">WHAT'S A USERSCRIPT?</h3>
 
         <p class="mb-4 text-[#1C222A] sm:pr-72">
-            A <a href="https://en.wikipedia.org/wiki/Userscript" class="font-mono text-[#531515] underline">userscript</a> is a small piece of JavaScript
+            A <a href="https://en.wikipedia.org/wiki/Userscript" target="_blank"  class="font-mono text-[#531515] underline">userscript</a> is a small piece of JavaScript
             that runs on websites to modify how they look or work. Userscripts let you:
         </p>
 
@@ -175,7 +195,7 @@
 
 <p class="mb-4 text-[#1C222A]">  
     Spend an hour making a userscript that <em>makes your life easier</em>, upload it to a
-    userscript site like <a href="https://greasyfork.org/" class="font-mono text-[#531515] underline">GreasyFork</a> and we'll
+    userscript site like <a href="https://greasyfork.org/" target="_blank"  class="font-mono text-[#531515] underline">GreasyFork</a> and we'll
     send you some cool stickers!
 </p>
 
@@ -193,16 +213,16 @@
 
 <ul class="mb-8 list-inside list-disc space-y-2 text-[#1C222A]">
     <li>
-        <a href="https://greasyfork.org/en/scripts/498197-auto-skip-youtube-ads" class="font-mono text-[#531515] underline">Auto Skip Youtube Ads</a> by flentq64
+        <a href="https://greasyfork.org/en/scripts/498197-auto-skip-youtube-ads" target="_blank" class="font-mono text-[#531515] underline">Auto Skip Youtube Ads</a> by flentq64
     </li>
-    <li><a href="https://victornpb.github.io/undiscord/" class="font-mono text-[#531515] underline">Undiscord</a> by victornpb</li>
+    <li><a href="https://victornpb.github.io/undiscord/" target="_blank" class="font-mono text-[#531515] underline">Undiscord</a> by victornpb</li>
     <li>
-        <a href="https://github.com/nazdridoy/github-commit-labels" class="font-mono text-[#531515] underline">GitHub Commit Labels</a> by nazafidy
+        <a href="https://github.com/nazdridoy/github-commit-labels" target="_blank" class="font-mono text-[#531515] underline">GitHub Commit Labels</a> by nazafidy
     </li>
     <li>
-        <a href="https://github.com/adamlui/autoclear-chatgpt-history" class="font-mono text-[#531515] underline">Auto Clear ChatGPT History</a> by adamlui
+        <a href="https://github.com/adamlui/autoclear-chatgpt-history" target="_blank" class="font-mono text-[#531515] underline">Auto Clear ChatGPT History</a> by adamlui
     </li>
-    <li>        <a href="https://greasyfork.org/en/scripts/423585-discord-amoled-dark-theme" class="font-mono text-[#531515] underline">Discord AMOLED Dark Theme</a> by JustTheo
+    <li>        <a href="https://greasyfork.org/en/scripts/423585-discord-amoled-dark-theme" target="_blank" class="font-mono text-[#531515] underline">Discord AMOLED Dark Theme</a> by JustTheo
     </li>
 </ul>
 
@@ -219,19 +239,20 @@
 <p class="mb-4 text-[#1C222A]">
     You'll need a userscript manager. I recommend <a
         href="https://violentmonkey.github.io"
+        target="_blank"
         class="font-mono text-[#531515] underline">Violentmonkey</a
     >.
 </p>
 
 <p class="mb-4 text-[#1C222A]">
     <strong>To track your time spent, you can't use the built-in editor.</strong> You can use
-    whatever editor you want as long as it supports <a href="https://hackatime.hackclub.com/">Hackatime</a>, and and follow
-    <a href="https://violentmonkey.github.io/posts/how-to-edit-scripts-with-your-favorite-editor/" class="font-mono text-[#531515] underline">this guide</a> to set it up.
+    whatever editor you want as long as it supports <a href="https://hackatime.hackclub.com/" target="_blank" class="font-mono text-[#531515] underline">Hackatime</a>, and and follow
+    <a href="https://violentmonkey.github.io/posts/how-to-edit-scripts-with-your-favorite-editor/" target="_blank" class="font-mono text-[#531515] underline">this guide</a> to set it up.
 </p>
 
 <p class="mb-6 text-[#1C222A] opacity-50 text-sm">
     <em
-        >psst... not using Violentmonkey? try <a href="https://stackoverflow.com/questions/41212558/develop-tampermonkey-scripts-in-a-real-ide-with-automatic-deployment-to-openuser" class="font-mono text-[#531515] underline"
+        >psst... not using Violentmonkey? try <a href="https://stackoverflow.com/questions/41212558/develop-tampermonkey-scripts-in-a-real-ide-with-automatic-deployment-to-openuser" target="_blank"  class="font-mono text-[#531515] underline"
             >this guide</a
         > instead...</em
     >
@@ -239,7 +260,7 @@
 
 <p class="mb-4 text-[#1C222A]">
     There are a ton of great resources online for learning how to make a userscript. If you're not
-    sure where to start, check out the <a href="https://violentmonkey.github.io/guide/creating-a-userscript/" class="font-mono text-[#531515] underline"
+    sure where to start, check out the <a href="https://violentmonkey.github.io/guide/creating-a-userscript/" target="_blank"  class="font-mono text-[#531515] underline"
         >Violentmonkey Guide</a
     >.
 </p>
@@ -247,6 +268,7 @@
 <p class="mb-6 text-[#1C222A]">
     Once you've made your userscript, you need to publish it on <a
         href="https://greasyfork.org/"
+        target="_blank" 
         class="font-mono text-[#531515] underline">GreasyFork</a
     >! GreasyFork is the largest online repository for sharing and installing userscripts.
 </p>
@@ -259,16 +281,18 @@
 <ol class="mb-12 list-inside list-decimal space-y-2 text-[#1C222A]">
     <li>Set up your editor</li>
     <li><strong>Spend >1hr</strong> making a userscript - be creative!</li>
-    <li>Publish it on <a href="https://greasyfork.org/" class="font-mono text-[#531515] underline">GreasyFork</a></li>
+    <li>Publish it on <a href="https://greasyfork.org/" target="_blank"  class="font-mono text-[#531515] underline">GreasyFork</a></li>
     <li>Submit it below</li>
     <li>Get some stickers!</li>
 </ol>
 </div>
 
 <div class="relative h-[25vw] max-md:h-[50vw]">
-    <a class="absolute top-2/5 -translate-y-1/2 w-full" href="https://forms.fillout.com/t/vC9c4xHRmgus">
-        <img src="/submit.png" alt="Submit" class="text-6xl h-32 max-sm:h-24 mx-auto">
+    <img src="/submit-bg.png" alt="" class="absolute top-2/5 left-1/2 -translate-1/2 w-max h-96 max-sm:h-24 opacity-60">
+    <a class="absolute top-2/5 left-1/2 -translate-1/2 w-max" href="https://forms.fillout.com/t/vC9c4xHRmgus">
+        <img src="/submit.png" alt="Submit" class="text-6xl h-32 max-sm:h-24">
     </a>
+
 
     <img src="/flowers-left.png" alt="" class="absolute left-0 bottom-0 h-auto w-[25vw]">
     <img src="/flowers-right.png" alt="" class="absolute right-0 bottom-0 h-auto w-[25vw]">
