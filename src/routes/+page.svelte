@@ -1,12 +1,13 @@
 <script lang="ts">
 	import { onMount } from "svelte";
-
 	let countdown = "00:00:00";
 	let cursorX = -100; // start off-screen
 	let cursorY = -100;
 	let isHovering = false;
 	let showCursor = false;
 	let isMobile = false;
+	let isAtTop = true;
+	let isAtBottom = false;
 
 	// 6pm EST on 6/20/24
     const deadline = new Date("2025-06-20T18:00:00-04:00");
@@ -23,13 +24,21 @@
 	function detectMobile() { // if the device has no mouse, treat it as mobile-- good enough for this
 		return matchMedia('(pointer: coarse)').matches
 	}
-
 	function handleMouseMove(event: MouseEvent) {
 		if (!isMobile) {
 			cursorX = event.clientX;
 			cursorY = event.clientY;
 			showCursor = true;
 		}
+	}
+
+	function handleScroll() {
+		const scrollTop = window.scrollY;
+		const scrollHeight = document.documentElement.scrollHeight;
+		const clientHeight = window.innerHeight;
+		
+		isAtTop = scrollTop === 0;
+		isAtBottom = scrollTop + clientHeight >= scrollHeight - 1; // -1 for rounding
 	}
 
     // for custom cursor hover effect
@@ -46,7 +55,6 @@
 			});
 		});
 	}
-
 	onMount(() => {
 		updateCountdown();
 		setInterval(updateCountdown, 1000);
@@ -54,6 +62,9 @@
 		isMobile = detectMobile();
         console.log(isMobile ? "Mobile device detected" : "Desktop device detected");
 		if (!isMobile) document.addEventListener('mousemove', handleMouseMove);
+		
+		window.addEventListener('scroll', handleScroll);
+		handleScroll();
 		
 		setTimeout(addHoverListeners, 100);
 	});
@@ -137,6 +148,15 @@
 		visibility: visible;
 	}
 </style>
+
+<!-- for overscroll/scroll pull on the top of the page -->
+{#if isAtTop}
+<div class="fixed top-0 w-full h-[100px] bg-[#ECEDF3] -z-50" style="background: linear-gradient(rgba(236,237,243,0.9),rgba(236,237,243,0.9)), url('/noise.png')"></div>
+{/if}
+<!-- for overscroll/scroll pull on the bottom of the page -->
+{#if isAtBottom}
+<div class="fixed bottom-0 w-full h-[100px] bg-[#384455] -z-50" style="background-image: linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), url('/noise.png'), url('/footer-bg.png'); background-repeat: repeat, repeat, repeat; background-blend-mode: normal, overlay, normal;"></div>
+{/if}
 
 <div class="absolute inset-0 h-[135vh] bg-gradient-to-b from-[#ECEDF3] to-[#DCDFEF] -z-10" style="background: linear-gradient(to bottom, rgba(236,237,243,0.9), rgba(220,223,239,0.9)), url('/noise.png');"></div>
 
