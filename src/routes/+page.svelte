@@ -78,12 +78,42 @@
         transition-property: width, height, border;
         transition-duration: 0.15s;
 	}
-	
-	.custom-cursor.hovering {
+		.custom-cursor.hovering {
 		width: 60px;
 		height: 60px;
 		background-color: transparent;
 		border: 18px solid white;
+	}
+	
+	.countdown-tooltip {
+		position: relative;
+		cursor: pointer;
+	}
+	
+	.countdown-tooltip::after {
+		content: "yes, really. get the stickers while you can!";
+		position: absolute;
+		bottom: -40px;
+		left: 50%;
+		transform: translateX(-50%) scaleY(calc(1/1.75));
+		background-color: #1C222A;
+		color: white;
+		padding: 8px 12px;
+		border-radius: 6px;
+		font-size: 14px;
+		font-weight: normal;
+		white-space: nowrap;
+		opacity: 0;
+		visibility: hidden;
+		transition: opacity 0.3s ease, visibility 0.3s ease;
+		transition-delay: 0.5s;
+		z-index: 1000;
+		pointer-events: none;
+	}
+	
+	.countdown-tooltip:hover::after {
+		opacity: 1;
+		visibility: visible;
 	}
 </style>
 
@@ -108,7 +138,7 @@
 </div>
 
 <div class="text-center mb-20 py-32">
-    <div class="font-mono text-xl font-bold transform scale-y-[1.75] text-[#86344D]">
+    <div class="font-mono text-xl font-bold transform scale-y-[1.75] text-[#86344D] countdown-tooltip">
         THIS WEBSITE WILL SELF DESTRUCT IN <span class="text-3xl translate-y-0.5 inline-block">{countdown}</span>
     </div>
 </div>
