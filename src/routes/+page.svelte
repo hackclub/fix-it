@@ -257,7 +257,7 @@
 
 <ol class="mb-12 list-inside list-decimal space-y-2 text-[#1C222A]">
     <li>Set up your editor</li>
-    <li>Make a userscript - be creative!</li>
+    <li><strong>Spend >1hr</strong> making a userscript - be creative!</li>
     <li>Publish it on <a href="https://greasyfork.org/" class="font-mono text-[#531515] underline">GreasyFork</a></li>
     <li>Submit it below</li>
     <li>Get some stickers!</li>
