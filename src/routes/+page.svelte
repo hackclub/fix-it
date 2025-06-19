@@ -52,7 +52,8 @@
 	});
 </script>
 
-<style>	:global(body) {
+<style>
+    :global(body) {
 		cursor: none !important;
 	}
 	
@@ -127,12 +128,12 @@
 		<p class="text-2xl text-[#1C222A]">too many websites suck.</p>
 	</div>
 
-    <div class="flex-1 w-full relative">
+    <div class="flex-1 w-[95%] mx-auto relative">
         <img src="/header.png" alt="FIX IT." class="absolute w-full -top-[60px] h-[calc(100%+60px+60px)] object-contain object-center" />
     </div>
 
-	<div class="text-center pb-8 px-4 z-10 relative">
-		<p class="text-lg text-[#1C222A] mb-4">make a userscript • get some stickers</p>
+	<div class="text-center pb-6 px-4 z-10 relative">
+		<p class="text-lg text-[#1C222A] mb-6">make a userscript • get some stickers</p>
 		<img src="/chevron.svg" alt="Chevron down" class="mx-auto w-16 h-8 opacity-60" />
 	</div>
 </div>
@@ -142,9 +143,9 @@
         THIS WEBSITE WILL SELF DESTRUCT IN <span class="text-3xl translate-y-0.5 inline-block">{countdown}</span>
     </div>
 </div>
-<div class="mx-auto mb-16 max-w-4xl">
+<div class="mx-auto mb-16 max-w-4xl px-4 md:px-12">
     <p class="mb-4 text-lg leading-relaxed text-[#1C222A]">
-        <span class="font-bold transform scale-y-175 inline-block origin-center text-[#1C222A] text-xl">FIX IT</span> is a
+        <span class="font-bold transform scale-y-175 inline-block origin-center text-[#1C222A] text-xl mr-0.5">FIX IT</span> is a
         <a href="https://ysws.hackclub.com/" class="font-mono text-[#531515] underline">You Ship, We Ship</a> about fixing the internet.
     </p>
 
@@ -154,12 +155,12 @@
     </p>    <div class="relative">
         <h3 class="mb-4 mt-12 font-bold transform scale-y-175 origin-center text-[#1C222A] text-xl">WHAT'S A USERSCRIPT?</h3>
 
-        <p class="mb-4 text-[#1C222A] pr-72">
+        <p class="mb-4 text-[#1C222A] sm:pr-72">
             A <a href="https://en.wikipedia.org/wiki/Userscript" class="font-mono text-[#531515] underline">userscript</a> is a small piece of JavaScript
             that runs on websites to modify how they look or work. Userscripts let you:
         </p>
 
-        <ul class="mb-6 list-inside list-disc space-y-2 text-[#1C222A] pr-72">
+        <ul class="mb-6 list-inside list-disc space-y-2 text-[#1C222A] sm:pr-72">
             <li>Remove annoying elements, like ads</li>
             <li>Add missing features</li>
             <li>Fix broken functionality</li>
@@ -167,7 +168,7 @@
             <li>Literally anything else you can think of</li>
         </ul>
 
-        <img src="/deco1.png" alt="" class="absolute top-0 h-86 w-auto opacity-90" style="right: calc((100vw - 100%) / -2);" />
+        <img src="/deco1.png" alt="" class="absolute top-0 h-86 w-auto opacity-90 max-sm:hidden" style="right: calc((100vw - 100%) / -2);" />
     </div>
 
 <h3 class="mb-4 mt-12 font-bold transform scale-y-175 origin-center text-[#1C222A] text-xl">WHAT DO I NEED TO DO?</h3>
@@ -264,9 +265,9 @@
 </ol>
 </div>
 
-<div class="relative h-[25vw]">
+<div class="relative h-[25vw] max-md:h-[50vw]">
     <a class="absolute top-2/5 -translate-y-1/2 w-full" href="https://forms.fillout.com/t/vC9c4xHRmgus">
-        <img src="/submit.png" alt="Submit" class="text-6xl h-32 mx-auto">
+        <img src="/submit.png" alt="Submit" class="text-6xl h-32 max-sm:h-24 mx-auto">
     </a>
 
     <img src="/flowers-left.png" alt="" class="absolute left-0 bottom-0 h-auto w-[25vw]">
