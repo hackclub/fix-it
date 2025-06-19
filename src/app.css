@@ -6,3 +6,11 @@ body {
 	font-family: 'Work Sans Variable', 'Work Sans', system-ui, sans-serif;
 	background-color: #DCDFEF;
 }
+
+.font-sans {
+	font-family: 'Work Sans Variable', 'Work Sans', system-ui, sans-serif;
+}
+
+.font-mono {
+	font-family: 'JetBrains Mono Variable', 'JetBrains Mono', monospace;
+}
