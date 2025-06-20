@@ -309,7 +309,7 @@
 
 <div class="relative h-[25vw] max-md:h-[50vw]">
     <img src="/submit-bg.png" alt="" class="absolute top-2/5 left-1/2 -translate-1/2 w-max h-96 max-sm:h-24 opacity-60">
-    <a class="absolute top-2/5 left-1/2 -translate-1/2 w-max" href="https://forms.fillout.com/t/vC9c4xHRmgus">
+    <a class="absolute top-2/5 left-1/2 -translate-1/2 w-max" href="https://forms.hackclub.com/fix-it">
         <img src="/submit.png" alt="Submit" class="text-6xl h-32 max-sm:h-24">
     </a>
 
