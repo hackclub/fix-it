@@ -10,8 +10,9 @@
 	let isAtBottom = false;
 	let countdownDone = false;
 
-	// 6pm EST on 6/20/24
-    const deadline = new Date("2025-05-20T18:00:00-04:00");
+	// 5pm EST on 6/20/24
+    const deadline = new Date("2025-06-20T17:00:00-04:00");
+
 	function updateCountdown() {
 		const now = new Date();
 		const diff = Math.max(0, Math.floor((deadline.getTime() - now.getTime()) / 1000));
@@ -358,7 +359,7 @@
 
 <div class="relative h-[25vw] max-md:h-[50vw]">
     <img src="/submit-bg.png" alt="" class="absolute top-2/5 left-1/2 -translate-1/2 w-max h-96 max-sm:h-24 opacity-60">
-    <a class="absolute top-2/5 left-1/2 -translate-1/2 w-max" href="https://forms.fillout.com/t/vC9c4xHRmgus">
+    <a class="absolute top-2/5 left-1/2 -translate-1/2 w-max" href="https://forms.hackclub.com/fix-it">
         <img src="/submit.png" alt="Submit" class="text-6xl h-32 max-sm:h-24">
     </a>
 
