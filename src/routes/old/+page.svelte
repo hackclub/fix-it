@@ -8,7 +8,6 @@
 	let isMobile = false;
 	let isAtTop = true;
 	let isAtBottom = false;
-	let countdownDone = false;
 
 	function detectMobile() { // if the device has no mouse, treat it as mobile-- good enough for this
 		return matchMedia('(pointer: coarse)').matches
@@ -167,26 +166,6 @@
 		visibility: visible;
 	}	
 </style>
-
-{#if countdownDone}
-<div class="fixed inset-0 bg-black">
-	<div class="absolute inset-0 flex items-center justify-center">
-		<img 
-			src="/pattern.png" 
-			alt="Pattern" 
-			class="w-auto h-auto max-w-full max-h-full object-contain floating-pattern"
-		/>
-	</div>
-	
-	<div class="absolute inset-0 flex items-center justify-center">
-		<img 
-			src="/broken.png" 
-			alt="Broken" 
-			class="w-auto h-auto max-w-full max-h-full object-contain relative z-10"
-		/>
-	</div>
-</div>
-{:else}
 
 <!-- for overscroll/scroll pull on the top of the page -->
 {#if isAtTop}
@@ -364,5 +343,3 @@
 		</p>
 	</div>
 </footer>
-
-{/if}

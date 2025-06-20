@@ -110,7 +110,7 @@
 	}
 	
 	.floating-pattern {
-		animation: float 10s ease-in-out infinite;
+		animation: float 7s ease-in-out infinite;
 	}
 	
 	.custom-cursor {
