@@ -9,8 +9,8 @@
 	let isAtTop = true;
 	let isAtBottom = false;
 
-	// 6pm EST on 6/20/24
-    const deadline = new Date("2025-06-20T18:00:00-04:00");
+	// 5pm EST on 6/20/24
+    const deadline = new Date("2025-06-20T17:00:00-04:00");
 
 	function updateCountdown() {
 		const now = new Date();
