@@ -8,13 +8,18 @@
 	let isMobile = false;
 	let isAtTop = true;
 	let isAtBottom = false;
+	let countdownDone = false;
 
 	// 6pm EST on 6/20/24
-    const deadline = new Date("2025-06-20T18:00:00-04:00");
-
+    const deadline = new Date("2025-05-20T18:00:00-04:00");
 	function updateCountdown() {
 		const now = new Date();
 		const diff = Math.max(0, Math.floor((deadline.getTime() - now.getTime()) / 1000));
+		if (diff <= 0) {
+			countdownDone = true;
+			document.body.classList.add("countdown-done");
+			return;
+		}
 		const hours = Math.floor(diff / 3600);
 		const minutes = Math.floor((diff % 3600) / 60);
 		const seconds = diff % 60;
@@ -54,10 +59,15 @@
 				isHovering = false;
 			});
 		});
-	}
+	}	
+	
 	onMount(() => {
 		updateCountdown();
 		setInterval(updateCountdown, 1000);
+		
+		if (countdownDone) {
+			document.body.classList.add('countdown-done');
+		}
 		
 		isMobile = detectMobile();
         console.log(isMobile ? "Mobile device detected" : "Desktop device detected");
@@ -71,7 +81,7 @@
 </script>
 
 <style>
-    :global(body) {
+	:global(body) {
 		cursor: none !important;
 	}
 	
@@ -83,6 +93,23 @@
 		background-attachment: scroll;
 		background-size: auto;
 		min-height: 100vh;
+	}
+
+	:global(body.countdown-done) {
+		background: black !important;
+	}
+	
+	@keyframes float {
+		0%, 100% {
+			transform: translateY(0px);
+		}
+		50% {
+			transform: translateY(-10px);
+		}
+	}
+	
+	.floating-pattern {
+		animation: float 10s ease-in-out infinite;
 	}
 	
 	.custom-cursor {
@@ -148,6 +175,28 @@
 		visibility: visible;
 	}
 </style>
+
+{#if countdownDone}
+<!-- svelte-ignore a11y_click_events_have_key_events -->
+<!-- svelte-ignore a11y_no_static_element_interactions -->
+<div class="fixed inset-0 bg-black" onclick={() => window.location.href = "/old"}>
+	<div class="absolute inset-0 flex items-center justify-center">
+		<img 
+			src="/pattern.png" 
+			alt="Pattern" 
+			class="w-auto h-auto max-w-full max-h-full object-contain floating-pattern"
+		/>
+	</div>
+	
+	<div class="absolute inset-0 flex items-center justify-center">
+		<img 
+			src="/broken.png" 
+			alt="Broken" 
+			class="w-auto h-auto max-w-full max-h-full object-contain relative z-10"
+		/>
+	</div>
+</div>
+{:else}
 
 <!-- for overscroll/scroll pull on the top of the page -->
 {#if isAtTop}
@@ -325,3 +374,5 @@
 		</p>
 	</div>
 </footer>
+
+{/if}
